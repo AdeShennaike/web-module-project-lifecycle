@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import FollowerList from './components/FollowerList'
-import Follower from './components/Follower';
 import User from './components/User'
 
 class App extends React.Component {
@@ -12,9 +11,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('https://api.github.com/users/AdeShennaike')
+    axios.get(`https://api.github.com/users/${this.state.input}`)
       .then(res => {
-        // console.log(res.data)
         this.setState({
           ...this.state,
           user: res.data
@@ -27,9 +25,8 @@ class App extends React.Component {
 
   componentDidUpdate(preProps, prevState) {
     if (prevState.user !== this.state.user) {
-      axios.get('https://api.github.com/users/AdeShennaike/followers')
+      axios.get(`https://api.github.com/users/${this.state.input}/followers`)
         .then(res =>{
-        console.log(res.data)
         this.setState({
           ...this.state,
           followers: res.data
@@ -43,8 +40,7 @@ class App extends React.Component {
 
   handleSearch = (e) => {
     e.preventDefault()
-    const newProfile = this.state.input
-    axios.get(`https://api.github.com/users/${newProfile}`)
+    axios.get(`https://api.github.com/users/${this.state.input}`)
       .then(res => {
         this.setState({
           ...this.state,
@@ -56,21 +52,21 @@ class App extends React.Component {
       })
   }
 
-  handleFollowerClickSearch = (id) => {
-    const newProfile = id
-    axios.get(`https://api.github.com/users/${newProfile}`)
-      .then(res => {
-        this.setState({
-          ...this.state,
-          user: res.data.map(item => {
-          return item
-          })
-        })
-      })
-      .catch(err =>{
-        console.error(err)
-      })
-  }
+  // handleFollowerClickSearch = (id) => {
+  //   const newProfile = id
+  //   axios.get(`https://api.github.com/users/${newProfile}`)
+  //     .then(res => {
+  //       this.setState({
+  //         ...this.state,
+  //         user: res.data.map(item => {
+  //         return item
+  //         })
+  //       })
+  //     })
+  //     .catch(err =>{
+  //       console.error(err)
+  //     })
+  // }
 
   handleChange = (e) => {
     this.setState({
@@ -84,11 +80,11 @@ class App extends React.Component {
       <div>
         <h1>GITHUB INFO</h1>
         <form>
-            <input value = {this.props.input} onChange = {this.props.handleChange} placeholder = 'Github Handle'/>
-            <button onClick = {this.props.handleSearch}> Search </button>
+            <input value = {this.state.input} onChange = {this.handleChange} placeholder = 'Github Handle'/>
+            <button onClick = {this.handleSearch}> Search </button>
         </form>
         <User user = {this.state.user} />
-        <FollowerList handleFollowerClickSearch = {this.handleFollowerClickSearch} followers = {this.state.followers} />
+        <FollowerList followers = {this.state.followers} />
       </div>
     );
   }
