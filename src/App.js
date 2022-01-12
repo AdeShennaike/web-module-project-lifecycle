@@ -56,6 +56,22 @@ class App extends React.Component {
       })
   }
 
+  handleFollowerClickSearch = (id) => {
+    const newProfile = id
+    axios.get(`https://api.github.com/users/${newProfile}`)
+      .then(res => {
+        this.setState({
+          ...this.state,
+          gitProfiles: res.data.map(item => {
+          return item
+          })
+        })
+      })
+      .catch(err =>{
+        console.error(err)
+      })
+  }
+
   handleChange = (e) => {
     this.setState({
       ...this.state,
@@ -69,7 +85,7 @@ class App extends React.Component {
         <h1>GITHUB INFO</h1>
         <User handleChange ={this.handleChange} handleSearch = {this.handleSearch} input = {this.state.input} />
         <Follower gitProfiles = {this.state.gitProfiles} />
-        <FollowerList gitProfilesFollowers = {this.state.gitProfilesFollowers} />
+        <FollowerList handleFollowerClickSearch = {this.handleFollowerClickSearch} gitProfilesFollowers = {this.state.gitProfilesFollowers} />
       </div>
     );
   }
