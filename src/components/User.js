@@ -4,10 +4,13 @@ import React from 'react';
 class User extends React.Component {
     render() {
         return (
-            <form>
-                <input value = {this.props.input} onChange = {this.props.handleChange}/>
-                <button onClick = {this.props.handleSearch}> Search </button>
-            </form>
+            <div>
+            <img width = '200' src = {this.props.user.avatar_url}/>
+            <p>{this.props.user.name}</p>
+            <p>({this.props.user.login})</p>
+            <p>TOTAL REPOS: {this.props.user.public_repos}</p>
+            <p>TOTAL FOLLOWERS: {this.props.user.followers}</p>
+        </div>
         )
     }
 }

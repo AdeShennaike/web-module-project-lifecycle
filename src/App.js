@@ -6,8 +6,8 @@ import User from './components/User'
 
 class App extends React.Component {
   state = {
-    gitProfiles: [],
-    gitProfilesFollowers: [],
+    user: {},
+    followers: [],
     input: ''
   }
 
@@ -17,7 +17,7 @@ class App extends React.Component {
         // console.log(res.data)
         this.setState({
           ...this.state,
-          gitProfiles: res.data
+          user: res.data
         })
       })
       .catch(err => {
@@ -26,13 +26,13 @@ class App extends React.Component {
   }
 
   componentDidUpdate(preProps, prevState) {
-    if (prevState.gitProfiles !== this.state.gitProfiles) {
+    if (prevState.user !== this.state.user) {
       axios.get('https://api.github.com/users/AdeShennaike/followers')
         .then(res =>{
         console.log(res.data)
         this.setState({
           ...this.state,
-          gitProfilesFollowers: res.data
+          followers: res.data
         })
         })
         .catch(err => {
@@ -48,7 +48,7 @@ class App extends React.Component {
       .then(res => {
         this.setState({
           ...this.state,
-          gitProfiles: res.data
+          user: res.data
         })
       })
       .catch(err =>{
@@ -62,7 +62,7 @@ class App extends React.Component {
       .then(res => {
         this.setState({
           ...this.state,
-          gitProfiles: res.data.map(item => {
+          user: res.data.map(item => {
           return item
           })
         })
@@ -83,9 +83,12 @@ class App extends React.Component {
     return(
       <div>
         <h1>GITHUB INFO</h1>
-        <User handleChange ={this.handleChange} handleSearch = {this.handleSearch} input = {this.state.input} />
-        <Follower gitProfiles = {this.state.gitProfiles} />
-        <FollowerList handleFollowerClickSearch = {this.handleFollowerClickSearch} gitProfilesFollowers = {this.state.gitProfilesFollowers} />
+        <form>
+            <input value = {this.props.input} onChange = {this.props.handleChange} placeholder = 'Github Handle'/>
+            <button onClick = {this.props.handleSearch}> Search </button>
+        </form>
+        <User user = {this.state.user} />
+        <FollowerList handleFollowerClickSearch = {this.handleFollowerClickSearch} followers = {this.state.followers} />
       </div>
     );
   }
